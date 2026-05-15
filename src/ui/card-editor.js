@@ -2494,10 +2494,10 @@ export function showCardEditor(mode) {
         dom.cardCancelCreateBtn.style.display = mode === 'create' ? 'inline-block' : 'none';
     }
     if (dom.cardImageToolsPanel) {
-        dom.cardImageToolsPanel.style.display = mode === 'create' && createImageDataUrl ? 'block' : 'none';
+        dom.cardImageToolsPanel.style.display = createImageDataUrl ? 'block' : 'none';
     }
     if (dom.cardGenerateImageBtn) {
-        dom.cardGenerateImageBtn.disabled = mode !== 'create';
+        dom.cardGenerateImageBtn.disabled = false;
     }
 }
 
@@ -2519,13 +2519,10 @@ export function hideCardEditor() {
 /**
  * Generates a character image via ComfyUI using Visual Description when available.
  * Falls back to Description when the dedicated visual prompt is empty.
- * On success the generated image replaces the current create-mode image.
- * Only active in create mode; prevents double-clicks via isGeneratingImage guard.
+ * On success the generated image replaces the current image (create or edit mode).
+ * Prevents double-clicks via isGeneratingImage guard.
  */
 async function generateCardImage() {
-    if (state.cardEditorMode !== 'create') {
-        return;
-    }
     if (isGeneratingImage) {
         return;
     }
